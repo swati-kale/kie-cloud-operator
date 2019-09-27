@@ -93,28 +93,517 @@ spec:
           - kind: ImageStream
             version: image.openshift.io/v1
         specDescriptors:
-          - description: Set true to enable automatic micro version product upgrades, it is disabled by default.
+          - description: >-
+              Set true to enable automatic micro version product upgrades, it is
+              disabled by default.
             displayName: Enable Upgrades
-            value: false
             path: upgrades.enabled
-            x-descriptors:
-              - "urn:alm:descriptor:com.tectonic.ui:booleanSwitch"
-          - description: Set true to enable automatic minor product version upgrades, it is disabled by default. Requires spec.upgrades.enabled to be true.
-            displayName: Include minor version upgrades
             value: false
-            path: upgrades.minor
             x-descriptors:
-              - "urn:alm:descriptor:com.tectonic.ui:booleanSwitch"
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:upgrades'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+          - description: >-
+              Set true to enable automatic minor product version upgrades, it is
+              disabled by default. Requires spec.upgrades.enabled to be true.
+            displayName: Include minor version upgrades
+            path: upgrades.minor
+            value: false
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:upgrades'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
           - description: Environment deployed.
             displayName: Environment
             path: environment
             x-descriptors:
-              - "urn:alm:descriptor:com.tectonic.ui:label"
+              - 'urn:alm:descriptor:com.tectonic.ui:select:rhdm-authoring-ha'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:rhdm-authoring'
+              - >-
+                urn:alm:descriptor:com.tectonic.ui:select:rhdm-production-immutable
+              - 'urn:alm:descriptor:com.tectonic.ui:select:rhdm-trial'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:rhpam-authoring-ha'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:rhpam-authoring'
+              - >-
+                urn:alm:descriptor:com.tectonic.ui:select:rhpam-production-immutable
+              - 'urn:alm:descriptor:com.tectonic.ui:select:rhpam-trial'
           - description: Product version installed.
             displayName: Version
             path: version
             x-descriptors:
-              - "urn:alm:descriptor:com.tectonic.ui:label"
+              - 'urn:alm:descriptor:com.tectonic.ui:label'
+          - description: URL of a custom registry where RHPAM images are stored.
+            displayName: Image registry
+            path: imageRegistry.registry
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:customRegistry'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Selected if image registry is insecure.
+            displayName: Insecure
+            path: imageRegistry.insecure
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:customRegistry'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+          - description: 'Administrative username for RHPAM components,'
+            displayName: Username
+            path: commonConfig.adminUser
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:adminUser'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              Administrative password to use instead of generating default
+              value.
+            displayName: Password
+            path: commonConfig.adminPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:adminUser'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: Authentication mode
+            displayName: Authentication mode
+            path: auth
+            value: Internal
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:select:Internal'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:SSO'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:LDAP'
+          - description: The password to use for "controllerUser". Generated if empty"
+            displayName: Controller password
+            path: commonConfig.controllerPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:internal'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: The password to use for "executionUser'". Generated if empty.
+            displayName: Server password
+            path: commonConfig.serverPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:internal'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: The password to use for AMQ user. Generated if empty
+            displayName: AMQ password
+            path: commonConfig.amqPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:otherCredentials'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: Password for AMQ Cluster. Generated if empty.
+            displayName: AMQ cluster password
+            path: commonConfig.amqClusterPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:otherCredentials'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: The password to use for "mavenUser". Generated if empty
+            displayName: Maven password
+            path: commonConfig.mavenPassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:otherCredentials'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: The password to use for keystore generation. Generated if empty.
+            displayName: Keystore password
+            path: commonConfig.keyStorePassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:otherCredentials'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: The password to use for databases. Generated if empty.
+            displayName: Database password
+            path: commonConfig.databasePassword
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:otherCredentials'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: >-
+              Whether to add to the current roles, or replace the current roles
+              with the mapped ones. Replaces if set to true.
+            displayName: Replace roles
+            path: auth.roleMapper.replaceRole
+            x-descriptors:
+              - >-
+                urn:alm:descriptor:com.tectonic.ui:fieldGroup:commonConfiguration
+              - 'urn:alm:descriptor:com.tectonic.ui:checkbox'
+          - description: The tag to use for the application images.
+            displayName: Image tag
+            path: commonConfig.imageTag
+            x-descriptors:
+              - >-
+                urn:alm:descriptor:com.tectonic.ui:fieldGroup:commonConfiguration
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              The secret name within the Java keystore used for https
+              encryption. Generated if empty
+            displayName: Keystore secret
+            path: objects.console.keystoreSecret
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:console'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The number of replicas for the console component.
+            displayName: Replicas
+            path: objects.console.replicas
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:console'
+              - 'urn:alm:descriptor:com.tectonic.ui:number'
+          - description: Environment variable name
+            displayName: Name
+            path: 'objects.console.env[0].name'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:console'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Environment variable value.
+            displayName: Value
+            path: 'objects.console.env[0].value'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:console'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Limits describes the minimum/maximum amount
+            displayName: Resource quotas
+            path: objects.console.resources
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:console'
+              - 'urn:alm:descriptor:com.tectonic.ui:resourceRequirements'
+          - description: 'Client name used for console in RH-SSO, when configured'
+            displayName: Client name
+            path: objects.console.ssoClient.name
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:SSOClient'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: 'Client secret to use for console in RH-SSO, when configured'
+            displayName: Client secret
+            path: objects.console.ssoClient.secret
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:SSOClient'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: 'HTTP hostname to set as redirect URL, when RH-SSO is configured'
+            displayName: SSO HTTP URL
+            path: objects.console.ssoClient.hostnameHTTP
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:SSOClient'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: 'HTTPS hostname to set as redirect URL, when RH-SSO is configured'
+            displayName: SSO HTTPS URL
+            path: objects.console.ssoClient.hostnameHTTPS
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:SSOClient'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The id to use for this KIE Server.
+            displayName: Id
+            path: 'objects.servers[0].id'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The name to use for this KIE Server.
+            displayName: Name
+            path: 'objects.servers[0].name'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              The number of distinct KIE Server sets to auto-generate, when
+              specifying a single server element here.
+            displayName: Deployments
+            path: 'objects.servers[0].deployment'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:number'
+          - description: >-
+              The secret name within the Java keystore used for https
+              encryption. Generated if empty
+            displayName: Keystore secret
+            path: 'objects.servers[0].keystoreSecret'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The number of replicas for this KIE Server set.
+            displayName: Replicas
+            path: 'objects.servers[0].replicas'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:number'
+          - description: >-
+              Specify whether containers are to be created from an image stream,
+              or a container image.
+            displayName: Kind
+            path: 'objects.servers[0]from.kind'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:ImageStreamTag'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:DockerImage'
+          - description: The name of the image stream or container image to use.
+            displayName: Name
+            path: 'objects.servers[0].from.name'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Namespace where the image/stream is located.
+            displayName: Namespace
+            path: 'objects.servers[0].from.namespace'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: KIE packages to deploy to the KIE Server.
+            displayName: KIE Server container deployment
+            path: 'objects.servers[0].build.kieServerContainerDeployment'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: URL of a Maven mirror to use.
+            displayName: Maven mirror URL
+            path: 'objects.servers[0].build.mavenMirrorURL'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Build artifact directory.
+            displayName: Artifact directory
+            path: 'objects.servers[0].build.artifactDir'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The URI of the Git repository to use in S2I build.
+            displayName: 2I Git URI
+            path: 'objects.servers[0].build.gitSource.uri'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Branch to use in the git repository for S2I build.
+            displayName: Reference
+            path: 'objects.servers[0].build.gitSource.reference'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              Context/subdirectory where the code is located, relatively to
+              repository root, to use for S2I build.
+            displayName: Context directory
+            path: 'objects.servers[0].build.gitSource.contextDir'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Secret value for WebHook to configure. Generated if empty.
+            displayName: Secret
+            path: 'objects.servers[0].build.webhooks[0].secret'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: Environment variable name
+            displayName: Name
+            path: 'objects.servers[0].env[0].name'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Environment variable value.
+            displayName: Value
+            path: 'objects.servers[0].env[0].value'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Limits describes the minimum/maximum amount
+            displayName: Resource quotas
+            path: 'objects.servers[0].resources'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:resourceRequirements'
+          - description: 'Client name used for this KIE Server in RH-SSO, when configured'
+            displayName: Client name
+            path: 'objects.servers[0].ssoClient.name'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              Client secret to use for this KIE Server in RH-SSO, when
+              configured
+            displayName: Client secret
+            path: 'objects.servers[0].ssoClient.secret'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: 'HTTP hostname to set as redirect URL, when RH-SSO is configured'
+            displayName: SSO HTTP URL
+            path: 'objects.servers[0].ssoClient.hostnameHTTP'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: 'HTTPS hostname to set as redirect URL, when RH-SSO is configured'
+            displayName: SSO HTTPS URL
+            path: 'objects.servers[0].ssoClient.hostnameHTTPS'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              When set to true will configure the KIE Server with JMS
+              integration, if no configuration is added, the default will be
+              used.
+            displayName: Enable JMS integration
+            path: 'objects.servers[0].jms.enableIntegration'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:checkbox'
+          - description: 'Set false to disable the JMS executor, it is enabled by default.'
+            displayName: Executor
+            path: 'objects.servers[0].jms.executor'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+          - description: >-
+              JNDI name of executor queue for JMS, example
+              queue/CUSTOM.KIE.SERVER.EXECUTOR, default is
+              queue/KIE.SERVER.EXECUTOR.
+            displayName: Queue Executor
+            path: 'objects.servers[0].jms.queueExecutor'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: 'Enable transactions for JMS executor, disabled by default.'
+            displayName: Executor Transacted
+            path: 'objects.servers[0].jms.executorTransacted'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+          - description: >-
+              JNDI name of request queue for JMS, example
+              queue/CUSTOM.KIE.SERVER.REQUEST, default is
+              queue/KIE.SERVER.REQUEST.
+            displayName: Queue Request
+            path: 'objects.servers[0].jms.queueRequest'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              JNDI name of executor queue for JMS, example
+              queue/CUSTOM.KIE.SERVER.RESPONSE, default is
+              queue/KIE.SERVER.RESPONSEx`x`.
+            displayName: Queue Response
+            path: 'objects.servers[0].jms.queueResponse'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Enable the Signal configuration through JMS. Default is false.
+            displayName: Enable Signal
+            path: 'objects.servers[0].jms.enableSignal'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+          - description: >-
+              JNDI name of signal queue for JMS, example
+              queue/CUSTOM.KIE.SERVER.SIGNAL, default is
+              queue/KIE.SERVER.SIGNAL.
+            displayName: Queue Signal
+            path: 'objects.servers[0].jms.queueSignal'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Enable the Audit logging through JMS. Default is false.
+            displayName: Enable Audit
+            path: 'objects.servers[0].jms.enableAudit'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+          - description: >-
+              JNDI name of audit logging queue for JMS, example
+              queue/CUSTOM.KIE.SERVER.AUDIT, default is queue/KIE.SERVER.AUDIT.
+            displayName: Queue Audit
+            path: 'objects.servers[0].jms.queueAudit'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: 'Enable transactions for JMS executor, disabled by default.'
+            displayName: Audit Transacted
+            path: 'objects.servers[0].jms.auditTransacted'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:booleanSwitch'
+          - description: 'AMQ broker username to connect do the AMQ, generated if empty.'
+            displayName: Username
+            path: 'objects.servers[0].jms.username'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: 'AMQ broker password to connect do the AMQ, generated if empty.'
+            displayName: Password
+            path: 'objects.servers[0].jms.password'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: >-
+              AMQ broker broker comma separated queues, if empty the values from
+              default queues will be used.
+            displayName: AMQ Queues
+            path: 'objects.servers[0].jms.amqQueues'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: >-
+              When set to true will configure the KIE Server with JMS
+              integration, if no configuration is added, the default will be
+              used.
+            displayName: Enable SSL integration
+            path: 'objects.servers[0].jms.amqEnableSSL'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:checkbox'
+          - description: The name of a secret containing AMQ SSL related files.
+            displayName: AMQ secret name
+            path: 'objects.servers[0].jms.amqSecretName'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The name of the AMQ SSL Trust Store file.
+            displayName: AMQ truststore name
+            path: 'objects.servers[0].jms.amqTruststoreName'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The password for the AMQ Trust Store.
+            displayName: AMQ truststore password
+            path: 'objects.servers[0].jms.amqTruststorePassword'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: The name of the AMQ SSL Key Store file.
+            displayName: AMQ keystore name
+            path: 'objects.servers[0].jms.amqKeystoreName'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The password for the AMQ Key Store.
+            displayName: AMQ keystore password
+            path: 'objects.servers[0].jms.amqKeystorePassword'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:password'
+          - description: Database type
+            displayName: Database type
+            path: 'objects.servers[0].database.type'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:KIEServers'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:mysql   '
+              - 'urn:alm:descriptor:com.tectonic.ui:select:postgresql'
+              - 'urn:alm:descriptor:com.tectonic.ui:select:external   '
+              - 'urn:alm:descriptor:com.tectonic.ui:select:h2'
+          - description: >-
+              The secret name within the Java keystore used for https
+              encryption. Generated if empty
+            displayName: Keystore secret
+            path: objects.smartRouter.keystoreSecret
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:smartRouter'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: The number of replicas for the console component.
+            displayName: Replicas
+            path: objects.smartRouter.replicas
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:smartRouter'
+              - 'urn:alm:descriptor:com.tectonic.ui:number'
+          - description: Environment variable name
+            displayName: Name
+            path: 'objects.smartRouter.env[0].name'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:smartRouter'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Environment variable value.
+            displayName: Value
+            path: 'objects.smartRouter.env[0].value'
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:smartRouter'
+              - 'urn:alm:descriptor:com.tectonic.ui:text'
+          - description: Limits describes the minimum/maximum amount
+            displayName: Resource quotas
+            path: objects.smartRouter.resources
+            x-descriptors:
+              - 'urn:alm:descriptor:com.tectonic.ui:fieldGroup:smartRouter'
+              - 'urn:alm:descriptor:com.tectonic.ui:resourceRequirements'
         statusDescriptors:
           - description: Deployments for the KieApp environment.
             displayName: Deployments
